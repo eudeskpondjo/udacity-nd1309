@@ -65,3 +65,6 @@ typings/
 
 # package-lock.json
 package-lock.json
+
+# Directory for DB
+chaindata

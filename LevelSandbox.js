@@ -35,7 +35,7 @@ class LevelSandbox {
                 if (err) { 
                     reject(err); 
                 } else {
-                    resolve("Block successfuly added !!! " + value);
+                    resolve(value);
                 }
             });
         });
