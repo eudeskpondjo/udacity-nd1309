@@ -8,15 +8,15 @@ For this project, the Node.js framework used is hapijs v18.1.0 (https://hapijs.c
 
 ## Endpoint documentation
 
-## Get a block by his height
+### Get a block by his height
 
-### Request
+#### Request
 
-`GET /block/{blockheight}`
+`GET /block/:height`
 
 	curl -i -H 'Accept: application/json' GET http://localhost:8000/block/0
 
-### Response
+#### Response
 
 	HTTP/1.1 200 OK
 	content-type: application/json; charset=utf-8
@@ -32,15 +32,15 @@ For this project, the Node.js framework used is hapijs v18.1.0 (https://hapijs.c
 		"previousblockhash":""
 	}
 
-## Get a block by his height
+### Create a block in the blockchain
 
-### Request
+#### Request
 
 `POST /block`
 
 	curl -i -H 'Accept: application/json' -d '{"body": "Test Data #Eudes"}' POST http://localhost:8000/block 
 
-### Response
+#### Response
 
 	HTTP/1.1 200 OK
 	content-type: application/json; charset=utf-8
