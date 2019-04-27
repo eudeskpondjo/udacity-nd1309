@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const BlockClass = require('../Block.js');
+const BlockClass = require('../model/Block.js');
 const BlockChain = require('../BlockChain.js');
 const Mempool = require('../Mempool.js');
 

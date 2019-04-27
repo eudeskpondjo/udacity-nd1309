@@ -1,14 +1,16 @@
-/* ===== BaseObject Class ==============================
-|  Class with a constructor for BaseObject 			   |
+/* ===== BaseModel Class ==============================
+|  Class with a constructor for BaseModel 			   |
 |  ===============================================*/
 
-class BaseObject {
+class BaseModel {
 
 	constructor(vRequestTimeStamp, vMessage, vValidationWindow){
-		// BaseObject properties
+		// BaseModel properties
 		this.requestTimeStamp = vRequestTimeStamp;
 		this.message = vMessage;
 		this.validationWindow = vValidationWindow;
 	}
 	
 }
+
+module.exports.BaseModel = BaseModel;

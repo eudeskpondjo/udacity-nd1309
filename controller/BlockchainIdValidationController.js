@@ -1,6 +1,7 @@
 const Joi = require('joi');
-const BlockClass = require('../Block.js');
-const Mempool = require('../Mempool.js');
+const RequestValidationModel = require('../model/RequestValidationModel').RequestValidationModel;
+const MessageSignatureModel = require('../model/MessageSignatureModel').MessageSignatureModel;
+const Mempool = require('../Mempool.js').Mempool;
 
 /**
  * Controller Definition to encapsulate routes to work with blocks
@@ -13,6 +14,7 @@ class BlockchainIdValidationController {
      */
     constructor(server) {
         this.server = server;
+        this.myMempool = new Mempool();
         this.validateRequest();
         this.validateMessageSignature();
     }
@@ -26,8 +28,8 @@ class BlockchainIdValidationController {
             path: '/requestValidation',
             handler: async (request, h) => {
                 try {
-                    let blockTest = new BlockClass.Block(request.payload.body);
-                    const result = await this.myBlockChain.addBlock(blockTest);
+                    let requestValidationObject = new RequestValidationModel(request.payload.address);
+                    const result = await this.myMempool.addARequestValidation(requestValidationObject);
                     const response = h.response(result);
                     response.code(200);
                     response.header('Content-Type', 'application/json; charset=utf-8');
@@ -39,7 +41,7 @@ class BlockchainIdValidationController {
             options: {
                 validate: {
                     payload: {
-                        body: Joi.string().required()
+                        address: Joi.string().required()
                     }
                 }
             }
@@ -55,8 +57,8 @@ class BlockchainIdValidationController {
             path: '/message-signature/validate',
             handler: async (request, h) => {
                 try {
-                    let blockTest = new BlockClass.Block(request.payload.body);
-                    const result = await this.myBlockChain.addBlock(blockTest);
+                    let messageSignatureObject = new MessageSignatureModel(request.payload.address, request.payload.signature);
+                    const result = await this.myMempool.validateRequestByWallet(messageSignatureObject);
                     const response = h.response(result);
                     response.code(200);
                     response.header('Content-Type', 'application/json; charset=utf-8');
@@ -68,7 +70,8 @@ class BlockchainIdValidationController {
             options: {
                 validate: {
                     payload: {
-                        body: Joi.string().required()
+                        address: Joi.string().required(),
+                        signature: Joi.string().required()
                     }
                 }
             }

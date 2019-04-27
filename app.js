@@ -21,9 +21,9 @@ class WebAPI {
      * Initilization of all the controllers
      */
 	initControllers() {
-        require("./controller/BlockController.js")(this.server);
+        // require("./controller/BlockController.js")(this.server);
         require("./controller/BlockchainIdValidationController.js")(this.server);
-        require("./controller/StarController.js/index.js.js")(this.server);
+        require("./controller/StarController.js")(this.server);
 	}
     
     async start() {
