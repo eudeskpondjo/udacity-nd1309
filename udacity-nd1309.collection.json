@@ -1,0 +1,70 @@
+{
+	"info": {
+		"_postman_id": "9134f5b4-843c-4ebf-9238-b5011f99bb9d",
+		"name": "udacity-nd1309",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET Block by height",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Connection",
+						"value": "close",
+						"type": "text"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8000/block/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"block",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Block",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"name": "Content-Type",
+						"value": "application/json",
+						"disabled": false
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"body\": \"Test Data #Eudes\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/block",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"block"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
