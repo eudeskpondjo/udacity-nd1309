@@ -3,7 +3,7 @@ const Hapi = require('hapi');
 /**
  * Class Definition for the REST API
  */
-class BlockAPI {
+class WebAPI {
 
     /**
      * Constructor that allows initialize the class 
@@ -21,7 +21,9 @@ class BlockAPI {
      * Initilization of all the controllers
      */
 	initControllers() {
-		require("./controller/BlockController.js")(this.server);
+        require("./controller/BlockController.js")(this.server);
+        require("./controller/BlockchainIdValidationController.js")(this.server);
+        require("./controller/StarController.js/index.js.js")(this.server);
 	}
     
     async start() {
@@ -31,4 +33,4 @@ class BlockAPI {
 
 }
 
-new BlockAPI();
+new WebAPI();
