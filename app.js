@@ -1,4 +1,6 @@
 const Hapi = require('hapi');
+const Mempool = require('./Mempool.js').Mempool;
+const Blockchain = require('./BlockChain.js').Blockchain;
 
 /**
  * Class Definition for the REST API
@@ -13,6 +15,8 @@ class WebAPI {
             port: 8000,
             host: 'localhost'
         });
+        this.myMempool = new Mempool();
+        this.myBlockChain = new Blockchain();
         this.initControllers();
         this.start();
     }
@@ -22,8 +26,8 @@ class WebAPI {
      */
 	initControllers() {
         // require("./controller/BlockController.js")(this.server);
-        require("./controller/BlockchainIdValidationController.js")(this.server);
-        require("./controller/StarController.js")(this.server);
+        require("./controller/BlockchainIdValidationController.js")(this.server, this.myMempool);
+        require("./controller/StarController.js")(this.server, this.myMempool, this.myBlockChain);
 	}
     
     async start() {

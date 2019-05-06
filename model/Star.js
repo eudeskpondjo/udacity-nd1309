@@ -11,6 +11,17 @@ class Star {
 		this.story = vStory;
 	}
 	
+	getDec() {
+		return this.dec;
+	}
+
+	getRa() {
+		return this.ra;
+	}
+
+	getStory() {
+		return this.story;
+	}
 }
 
 module.exports.Star = Star;

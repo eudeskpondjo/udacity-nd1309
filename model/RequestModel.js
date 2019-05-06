@@ -2,14 +2,34 @@
 |  Class with a constructor for RequestModel 			   |
 |  ===============================================*/
 
-const BaseModel = require('./BaseModel').BaseModel;
+class RequestModel {
 
-class RequestModel extends BaseModel {
-
-	constructor(vWalletAddress, vRequestTimeStamp, vMessage, vValidationWindow){
+	constructor(vWalletAddress, vRequestTimeStamp){
 		// RequestModel properties
-		super(vRequestTimeStamp, vMessage, vValidationWindow)
+		this.requestTimeStamp = vRequestTimeStamp;
+		this.validationWindow = 300;
 		this.walletAddress = vWalletAddress;
+		this.message = vWalletAddress.concat(":").concat(vRequestTimeStamp).concat(":").concat("starRegistry");
+	}
+
+	getWalletAddress() {
+		return this.walletAddress;
+	}
+
+	getRequestTimeStamp() {
+		return this.requestTimeStamp;
+	}
+
+	getValidationWindow() {
+		return this.validationWindow;
+	}
+
+	getMessage() {
+		return this.message;
+	}
+
+	setValidationWindow(vWindow) {
+		this.validationWindow = vWindow;
 	}
 
 }

@@ -20,11 +20,16 @@ class Blockchain {
     generateGenesisBlock() {
         // Add your code here
         let self = this;
-        self.getBlockHeight().then(function (blockCount) {
-            if (blockCount == 0) {
-                self.addBlock(new Block.Block("This is my GenesisBlock."));
-            }
-        });
+        self.getBlockHeight()
+            .then(function (blockCount) {
+                if (blockCount == 0) {
+                    self.addBlock(new Block.Block("This is my GenesisBlock."));
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+                reject(new Error("ERROR_BLOCKCH_BLOCK_GEN"));
+            });
 
     }
 
@@ -38,7 +43,8 @@ class Blockchain {
                     resolve(count);
                 })
                 .catch(function (err) {
-                    reject(err);
+                    console.log(err);
+                    reject(new Error("ERROR_BLOCKCH_BLOCK_HEIGHT"));
                 });
         });
     }
@@ -52,22 +58,28 @@ class Blockchain {
             self.getBlockHeight()
                 .then(function (blockCount) { // get the block height
                     block.height = blockCount;
-                }).then(function () { // get the previous block
+                })
+                .then(function () { // get the previous block
                     if (block.height > 0) {
                         return self.getBlock(block.height - 1);
                     }
-                }).then(function (previousBlock) { // Set the hash of the previous block
+                })
+                .then(function (previousBlock) { // Set the hash of the previous block
                     if (block.height > 0) {
-                        block.previousBlock = previousBlock.hash;
+                        block.previousblockhash = previousBlock.hash;
                     }
-                }).then(function () { // Save the new bloc in the DB
+                })
+                .then(function () { // Save the new bloc in the DB
                     block.time = new Date().getTime().toString().slice(0, -3);
                     block.hash = SHA256(JSON.stringify(block)).toString();
                     return self.bd.addLevelDBData(block.height, JSON.stringify(block).toString());
-                }).then(function (result) {
+                })
+                .then(function (result) {
                     resolve(result);
-                }).catch(function (err) {
-                    reject(err);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    reject(new Error("ERROR_BLOCKCH_BLOCK_ADD"));
                 });
         });
     }
@@ -80,10 +92,28 @@ class Blockchain {
             // Add your code here, remember in Promises you need to resolve() or reject() 
             self.bd.getLevelDBData(height)
                 .then(function (block) {
-                    resolve(JSON.parse(block));
+                    resolve(block);
                 })
                 .catch(function (err) {
-                    reject(err);
+                    console.log(err);
+                    reject(new Error("ERROR_BLOCKCH_BLOCK_GET_BY_HEIGHT"));
+                });
+        });
+    }
+
+    // Get Block By wallet address
+    getBlockByCriteria(criterias) {
+        // Add your code here
+        let self = this;
+        return new Promise(function (resolve, reject) {
+            // Add your code here, remember in Promises you need to resolve() or reject() 
+            self.bd.getLevelDBDataByCriteria(criterias)
+                .then(function (result) {
+                    resolve(result);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    reject(new Error("ERROR_BLOCKCH_BLOCK_GET_BY_CRITERIA"));
                 });
         });
     }
@@ -100,8 +130,10 @@ class Blockchain {
                     blockToValidate.hash = "";
                     let newBlockHash = SHA256(JSON.stringify(blockToValidate)).toString();
                     resolve(oldBlockHash == newBlockHash);
-                }).catch(function (err) {
-                    reject(err);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    reject(new Error("ERROR_BLOCKCH_BLOCK_VALIDATE"));
                 });
         });
     }
@@ -127,11 +159,14 @@ class Blockchain {
                 .then(function (currentBlock) { // get the current block
                     currentBlockHash = currentBlock.hash;
                     return self.getBlock(nextBlockHeight);
-                }).then(function (nextBlock) { // get the next block
-                    nextBlockPreviousBlockHash = nextBlock.previousBlock;
+                })
+                .then(function (nextBlock) { // get the next block
+                    nextBlockPreviousBlockHash = nextBlock.previousblockhash;
                     resolve(isBlockValid && (nextBlockPreviousBlockHash == currentBlockHash));
-                }).catch(function (err) {
-                    reject(err);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    reject(new Error("ERROR_BLOCKCH_BLOCK_IS_VALID"));
                 });
         });
     }
@@ -148,24 +183,27 @@ class Blockchain {
             self.getBlockHeight()
                 .then(function (blockCount) { // get the block height
                     numberOfBlock = blockCount;
-                }).then(function () { // get the previous block
+                })
+                .then(function () { // get the previous block
                     for (var i = 0; i < numberOfBlock; i++) {
                         var j = i + 1;
-                        if (i == (numberOfBlock -1 )) {
+                        if (i == (numberOfBlock - 1)) {
                             j = i;
                         }
                         promises.push(self.isBlockValidAndBlockHashEqualToNextPreviousHash(i, j));
                     }
                     return Promise.all(promises);
-                }).then(function (result) {
+                })
+                .then(function (result) {
                     result.forEach(function (item, j) {
                         if (item == false) {
                             errorLog.push(j);
                         }
                     });
                     resolve(errorLog);
-                }).catch(function (err) {
-                    reject(err);
+                })
+                .catch(function (err) {
+                    reject(new Error("ERROR_BLOCKCH_CHAIN_VALIDATE"));
                 });
         });
     }

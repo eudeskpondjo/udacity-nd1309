@@ -1,18 +1,26 @@
 /* ===== StatusModel Class ==============================
-|  Class with a constructor for StatusModel 			   |
+|  Class with a constructor for StatusModel 			|
 |  ===============================================*/
 
-const BaseModel = require('./BaseModel').BaseModel;
+class StatusModel {
 
-class StatusModel extends BaseModel {
-
-	constructor(vAddress, vRequestTimeStamp, vMessage, vValidationWindow, vMessageSignature){
+	constructor(storedRequestObject, vMessageSignature){
 		// StatusModel properties
-		super(vRequestTimeStamp, vMessage, vValidationWindow)
-		this.address = vAddress;
+		this.requestTimeStamp = storedRequestObject.requestTimeStamp;
+		this.message = storedRequestObject.message;
+		this.validationWindow = storedRequestObject.validationWindow;
+		this.address = storedRequestObject.walletAddress;
 		this.messageSignature = vMessageSignature;
 	}
-	
+
+	getAddress() {
+		return this.address;
+	}
+
+	getMessageSignature() {
+		return this.messageSignature;
+	}	
+
 }
 
 module.exports.StatusModel = StatusModel;

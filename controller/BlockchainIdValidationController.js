@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const RequestValidationModel = require('../model/RequestValidationModel').RequestValidationModel;
 const MessageSignatureModel = require('../model/MessageSignatureModel').MessageSignatureModel;
-const Mempool = require('../Mempool.js').Mempool;
+const BlockchainError = require('../model/BlockchainError').BlockchainError;
 
 /**
  * Controller Definition to encapsulate routes to work with blocks
@@ -12,9 +12,9 @@ class BlockchainIdValidationController {
      * Constructor to create a new BlockchainIdValidationController with initialization of all our endpoints
      * @param {*} server 
      */
-    constructor(server) {
+    constructor(server, mempool) {
         this.server = server;
-        this.myMempool = new Mempool();
+        this.myMempool = mempool;
         this.validateRequest();
         this.validateMessageSignature();
     }
@@ -64,7 +64,32 @@ class BlockchainIdValidationController {
                     response.header('Content-Type', 'application/json; charset=utf-8');
                     return response;
                 } catch (err) {
-                    throw err;
+                    let errorToReturn = new BlockchainError();
+                    switch (err.message) {
+                        case "SIGNATURE_NOT_VALID.":
+                            errorToReturn.setMessage("The signature provided is not valid.");
+                            errorToReturn.setStatusCode(400);
+                            errorToReturn.setError("SIGNATURE_NOT_VALID.");
+                            break;
+                        case "TIME_WINDOW_EXPIRED.":
+                            errorToReturn.setMessage("This request is not longer valid. The time windows has expired.");
+                            errorToReturn.setStatusCode(400);
+                            errorToReturn.setError("TIME_WINDOW_EXPIRED.");
+                            break;
+                        case "REQUEST_NOT_IN_MEMPOOL":
+                            errorToReturn.setMessage("There is no request related to the address specified.");
+                            errorToReturn.setStatusCode(400);
+                            errorToReturn.setError("REQUEST_NOT_IN_MEMPOOL.");
+                            break;
+                        default:
+                            errorToReturn.setMessage("Unknown error.");
+                            errorToReturn.setStatusCode(500);
+                            errorToReturn.setError("UNKNOWN_ERROR.");
+                    }
+                    const response = h.response(errorToReturn);
+                    response.code(errorToReturn.getStatusCode());
+                    response.header('Content-Type', 'application/json; charset=utf-8');
+                    return response;
                 }
             },
             options: {
@@ -83,4 +108,4 @@ class BlockchainIdValidationController {
  * Exporting the BlockchainIdValidationController class
  * @param {*} server 
  */
-module.exports = (server) => { return new BlockchainIdValidationController(server); }
+module.exports = (server, mempool) => { return new BlockchainIdValidationController(server, mempool); }

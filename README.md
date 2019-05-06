@@ -53,8 +53,7 @@ For this project, the Node.js framework used is hapijs v18.1.0 (https://hapijs.c
 		"height": 21,
 		"body": "Test Data #Eudes",
 		"time": "1555177934",
-		"previousblockhash": "",
-		"previousBlock": "5014b9bfbb1e4871bf2504fd1f9d9fe401f64d1741e975270e44fdb4dfc525bc"
+		"previousblockhash": "5014b9bfbb1e4871bf2504fd1f9d9fe401f64d1741e975270e44fdb4dfc525bc"
 	}
 
 ## Setup project for Review.

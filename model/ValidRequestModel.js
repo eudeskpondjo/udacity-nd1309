@@ -2,8 +2,6 @@
 |  Class with a constructor for ValidRequestModel 			   |
 |  ===============================================*/
 
-const BaseModel = require('./BaseModel').BaseModel;
-
 class ValidRequestModel {
 
 	constructor(vRegisterStar, data){
@@ -11,7 +9,14 @@ class ValidRequestModel {
 		this.registerStar = vRegisterStar;
 		this.status = data;
 	}
+
+	getRegisterStar() {
+		return this.registerStar;
+	}
 	
+	getStatus() {
+		return this.status;
+	}
 }
 
 module.exports.ValidRequestModel = ValidRequestModel;
