@@ -17,6 +17,11 @@
 						"key": "Connection",
 						"value": "close",
 						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
 					}
 				],
 				"body": {},
@@ -61,6 +66,186 @@
 					"port": "8000",
 					"path": [
 						"block"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "requestValidation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n\t\"address\":\"1BtAwxYTSBQR8tj4ddAbEap1qqDLyvTgex\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/requestValidation",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"requestValidation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signatureValidation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"address\":\"1BtAwxYTSBQR8tj4ddAbEap1qqDLyvTgex\",\n\t\"signature\":\"IK74YqaPqxleIxBztt9GMbMOMnSOWa1SwkOal+My+61MX4M5WvLKx70LUPdlxiCCMi5Qv7zoImWfqt9mUP+emo0=\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/message-signature/validate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"message-signature",
+						"validate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save Block",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\": \"1BtAwxYTSBQR8tj4ddAbEap1qqDLyvTgex\",\n    \"star\": {\n    \t\"dec\": \"68° 34' 56.9\",\n    \t\"ra\": \"16h 19m 1.0s\",\n    \t\"story\": \"J'espere que c'est trest je suis content.\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/block",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"block"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get block by hash",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/stars/hash:9811e8e77fb143d6aad3755763f9c3d6223b772a6311c027e6a414b5ececc867",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"stars",
+						"hash:9811e8e77fb143d6aad3755763f9c3d6223b772a6311c027e6a414b5ececc867"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get block by address",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/stars/address:1BtAwxYTSBQR8tj4ddAbEap1qqDLyvTgex",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"stars",
+						"address:1BtAwxYTSBQR8tj4ddAbEap1qqDLyvTgex"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get block by height",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/block/7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"block",
+						"7"
 					]
 				}
 			},
