@@ -4,12 +4,12 @@
 
 class Star {
 
-	constructor(vDec, vRa, vMag, vCen, vStory){
+	constructor(vDec, vRa, vStory){
 		// Star properties
 		this.dec = vDec;
 		this.ra = vRa;
-		this.mag = vMag,
-        this.cen = vCen,
+		this.mag = "",
+        this.cen = "",
 		this.story = vStory;
 	}
 	

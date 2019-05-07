@@ -4,7 +4,9 @@
 
 const SHA256 = require('crypto-js/sha256');
 const LevelSandbox = require('./LevelSandbox.js');
-const Block = require('./model/Block.js');
+const Block = require('./model/Block').Block;
+const Star = require('./model/Star').Star;
+const StarRequestModel = require('./model/StarRequestModel').StarRequestModel;
 
 class Blockchain {
 
@@ -23,7 +25,10 @@ class Blockchain {
         self.getBlockHeight()
             .then(function (blockCount) {
                 if (blockCount == 0) {
-                    self.addBlock(new Block.Block("This is my GenesisBlock."));
+                    let genesisStar = new Star("70° 21' 0.6", "9h 26m 10.0s", "This is my Genesis Star.");
+                    genesisStar.story = new Buffer(genesisStar.story).toString('hex');
+                    let genesisStarRequestModel = new StarRequestModel("1BtAwxYTSBQR8tj4ddAbEap1qqDLyvTgex", genesisStar);
+                    self.addBlock(new Block(genesisStarRequestModel));
                 }
             })
             .catch(function (err) {
