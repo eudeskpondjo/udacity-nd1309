@@ -30,7 +30,7 @@ class Mempool {
                 // 1- the address in the mempool
                 self.mempool.set(address, requestObject);
                 // 2- the requesttimestamp in timeoutRequests
-                self.timeoutRequests[address] = setTimeout(function () { self.removeValidationRequest(address) }, TimeoutRequestsWindowTime);
+                self.timeoutRequests[address] = setTimeout(function () { self.removeWalletAddress(address) }, TimeoutRequestsWindowTime);
                 resolve(requestObject);
             } else {
                 // the adresse is in the mempool
@@ -85,8 +85,12 @@ class Mempool {
         });
     }
 
-    removeValidationRequest(wAddress) {
+    removeWalletAddress(wAddress) {
         this.mempool.delete(wAddress);
+    }
+
+    removeValidationRequest(wAddress) {
+        this.mempoolValid.delete(wAddress);
     }
 
 }

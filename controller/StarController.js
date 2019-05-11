@@ -17,7 +17,7 @@ class StarRegistrationController {
         this.myMempool = mempool;
         this.myBlockChain = blockchain;
         this.saveStarInBlockchain();
-        this.getStarBlockByWalletAddress();
+        this.getStarBlockByCriteria();
         this.getStarBlockByStarBlockHeight();
     }
 
@@ -36,6 +36,7 @@ class StarRegistrationController {
                         startRequestObject.star.story = new Buffer(startRequestObject.star.story).toString('hex');
                         let blockToAdd = new Block(startRequestObject);
                         let blockAdded = await this.myBlockChain.addBlock(blockToAdd);
+                        this.myMempool.removeValidationRequest(blockAdded.body.address);
                         const response = h.response(blockAdded);
                         response.code(200);
                         response.header('Content-Type', 'application/json; charset=utf-8');
@@ -78,13 +79,23 @@ class StarRegistrationController {
     /**
      * Implement a GET Endpoint to Get Star block by wallet address (blockchain identity) with JSON response. url: "/stars/address:address"
      */
-    getStarBlockByWalletAddress() {
+    getStarBlockByCriteria() {
         this.server.route({
             method: 'GET',
             path: '/stars/{criteria}',
             handler: async (request, h) => {
                 try {
-                    const result = await this.myBlockChain.getBlockByCriteria(request.params.criteria);
+                    var criteria = request.params.criteria.split(":");
+                    let result = "";
+                    switch (criteria[0]) {
+                        case "address":
+                            result = await this.myBlockChain.getBlockByAddress(criteria[1]);
+                            break;
+                        case "hash":
+                            result = await this.myBlockChain.getBlockByHash(criteria[1]);
+                            break;
+                        default:
+                    }
                     const response = h.response(result);
                     response.code(200);
                     response.header('Content-Type', 'application/json; charset=utf-8');
@@ -92,10 +103,15 @@ class StarRegistrationController {
                 } catch (err) {
                     let errorToReturn = new BlockchainError();
                     switch (err.message) {
-                        case "ERROR_BLOCKCH_BLOCK_GET_BY_CRITERIA":
-                            errorToReturn.setMessage("Somethings bad happens when retrieving block by criteria");
+                        case "ERROR_BLOCKCH_BLOCK_GET_BY_ADDRESS":
+                            errorToReturn.setMessage("Somethings bad happens when retrieving block by address");
                             errorToReturn.setStatusCode(400);
-                            errorToReturn.setError("ERROR_BLOCKCH_BLOCK_GET_BY_CRITERIA.");
+                            errorToReturn.setError("ERROR_BLOCKCH_BLOCK_GET_BY_ADDRESS.");
+                            break;
+                        case "ERROR_BLOCKCH_BLOCK_GET_BY_HASH":
+                            errorToReturn.setMessage("Somethings bad happens when retrieving block by hash");
+                            errorToReturn.setStatusCode(400);
+                            errorToReturn.setError("ERROR_BLOCKCH_BLOCK_GET_BY_HASH.");
                             break;
                         default:
                             errorToReturn.setMessage("Unknown error.");

@@ -30,36 +30,47 @@ class LevelSandbox {
         });
     }
 
-    // Get data from levelDB by address or hash (Promise)
-    getLevelDBDataByCriteria(criterias) {
+    // Get data from levelDB by address (Promise)
+    getBlockByAddress(address) {
         let self = this;
         return new Promise(function (resolve, reject) {
             // Add your code here, remember in Promises you need to resolve() or reject()
-            var criteria = criterias.split(":");
             var result = [];
             self.db.createValueStream()
                 .on('data', function (data) {
-                    switch (criteria[0]) {
-                        case "address":
-                            if (JSON.parse(data).body.address === criteria[1]) {
-                                let blockInJson = JSON.parse(data);
-                                blockInJson.body.star.storyDecoded = hex2ascii(blockInJson.body.star.story);
-                                result.push(blockInJson);
-                            }
-                            break;
-                        case "hash":
-                            if (JSON.parse(data).hash === criteria[1]) {
-                                let blockInJson = JSON.parse(data);
-                                blockInJson.body.star.storyDecoded = hex2ascii(blockInJson.body.star.story);
-                                result.push(blockInJson);
-                            }
-                            break;
-                        default:
+                    if (JSON.parse(data).body.address === address) {
+                        let blockInJson = JSON.parse(data);
+                        blockInJson.body.star.storyDecoded = hex2ascii(blockInJson.body.star.story);
+                        result.push(blockInJson);
                     }
                 })
                 .on('error', function (err) {
                     console.log(err);
-                    reject(new Error("ERROR_DB_BLOCK_GET_BY_CRITERIA"));
+                    reject(new Error("ERROR_DB_BLOCK_GET_BY_ADDRESS"));
+                })
+                .on('close', function () {
+                    resolve(result);
+                });
+        });
+    }
+
+    // Get data from levelDB by hash (Promise)
+    getBlockByHash(hash) {
+        let self = this;
+        return new Promise(function (resolve, reject) {
+            // Add your code here, remember in Promises you need to resolve() or reject()
+            var result = "";
+            self.db.createValueStream()
+                .on('data', function (data) {
+                    if (JSON.parse(data).hash === hash) {
+                        let blockInJson = JSON.parse(data);
+                        blockInJson.body.star.storyDecoded = hex2ascii(blockInJson.body.star.story);
+                        result = blockInJson;
+                    }
+                })
+                .on('error', function (err) {
+                    console.log(err);
+                    reject(new Error("ERROR_DB_BLOCK_GET_BY_HASH"));
                 })
                 .on('close', function () {
                     resolve(result);

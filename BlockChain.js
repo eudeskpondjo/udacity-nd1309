@@ -107,21 +107,38 @@ class Blockchain {
     }
 
     // Get Block By wallet address
-    getBlockByCriteria(criterias) {
+    getBlockByAddress(address) {
         // Add your code here
         let self = this;
         return new Promise(function (resolve, reject) {
             // Add your code here, remember in Promises you need to resolve() or reject() 
-            self.bd.getLevelDBDataByCriteria(criterias)
+            self.bd.getBlockByAddress(address)
                 .then(function (result) {
                     resolve(result);
                 })
                 .catch(function (err) {
                     console.log(err);
-                    reject(new Error("ERROR_BLOCKCH_BLOCK_GET_BY_CRITERIA"));
+                    reject(new Error("ERROR_BLOCKCH_BLOCK_GET_BY_ADDRESS"));
                 });
         });
     }
+
+        // Get Block By hash
+        getBlockByHash(hash) {
+            // Add your code here
+            let self = this;
+            return new Promise(function (resolve, reject) {
+                // Add your code here, remember in Promises you need to resolve() or reject() 
+                self.bd.getBlockByHash(hash)
+                    .then(function (result) {
+                        resolve(result);
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                        reject(new Error("ERROR_BLOCKCH_BLOCK_GET_BY_HASH"));
+                    });
+            });
+        }
 
     // Validate if Block is being tampered by Block Height
     validateBlock(height) {
