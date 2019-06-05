@@ -232,6 +232,6 @@ To setup the project for review do the following:
 2. Run command __npm install__ to install the project dependencies.
 3. Run command __node app.js__ in the root directory.
 
-## Testing the project using Postman
+## Testing the project using Postman 
 
 1. Import the Postman collection `udacity-nd1309.collection.json` into Postman
